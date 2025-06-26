@@ -140,9 +140,6 @@ public class BoardController {
     public String saveForm(HttpSession session) {
 
         log.info("게시글 작성 화면 요청");
-
-        // 권한 체크 -> 로그인된 사용자만 이동 들어오게함
-
         return "board/save-form";
     }
 
