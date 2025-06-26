@@ -1,6 +1,5 @@
 package com.tenco.blog.board;
 
-import com.tenco.blog._core.errors.exception.Exception401;
 import com.tenco.blog._core.errors.exception.Exception403;
 import com.tenco.blog._core.errors.exception.Exception404;
 import com.tenco.blog.user.User;
@@ -40,10 +39,6 @@ public class BoardController {
 
         // 1.
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스 입니다. 먼저 로그인 부터 하세요");
-        }
-
         // 2.
         Board board = boardRepository.findById(boardId);
         if (board == null) {
@@ -77,10 +72,6 @@ public class BoardController {
         log.info("게시글 수정 기능 요청 - boardId : {}, 새 제목 {}", boardId, reqDTO.getTitle());
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스 입니다");
-        }
-
         // 2. 사용자 입력값 유효성 검사
         reqDTO.validate();
 
@@ -114,13 +105,7 @@ public class BoardController {
         // 1. 로그인 체크 - Define.SESSION_USER
         User sessionUser = (User) session.getAttribute("sessionUser");
         // 2. 로그인 x
-        if (sessionUser == null) {
-            // 로그인 페이지로 리다이렉트 처리
-            // redirect: --> 내부에서 바로 페이지를 찾는게 아님
-            // 다시 클라이언트에 와서 -> 다시 GET 요청이 온 것을 받음 (HTTP 메세지 생성 됨)
-            throw new Exception401("로그인이 필요한 서비스 입니다");
 
-        }
         // <-- 관리자가 게시물 강제 삭제
         // -->>
         // 3. 게시물 존배 여부 확인
@@ -157,11 +142,7 @@ public class BoardController {
         log.info("게시글 작성 화면 요청");
 
         // 권한 체크 -> 로그인된 사용자만 이동 들어오게함
-        User sessionUser = (User) session.getAttribute("sessionUser"); // 값 꺼내기
-        if (sessionUser == null) {
-            // 로그인 안한 경우 다시 로그인 페이지로 리다이렉트 처리
-            throw new Exception401("로그인이 필요한 서비스 입니다");
-        }
+
         return "board/save-form";
     }
 
@@ -174,10 +155,6 @@ public class BoardController {
 
         // 1. 권한 체크
         User sessionUser = (User) session.getAttribute("sessionUser"); // 값 꺼내기
-        if (sessionUser == null) {
-            // 로그인 안한 경우 다시 로그인 페이지로 리다이렉트 처리
-           throw new Exception401("로그인이 필요한 서비스 입니다");
-        }
 
         // 2. 유효성 검사
         reqDTO.validate();
